@@ -1,0 +1,37 @@
+form{
+	width:700px;
+	padding: 20px 20px 20px 20px;
+	border: 2px solid blue;
+	margin: 0 auto;
+}
+.p_details{
+padding: 10px 10px 10px 10px;
+}
+.addr_details{
+padding: 10px 10px 10px 10px;
+}
+label{
+	padding: 10px 10px 10px 10px;
+	width:150px;
+	text-align:right;
+	display:inline-block;
+	font-family:"Times New Roman";	
+}
+
+h1{
+	padding: 20px 20px 20px 20px;
+	border: 2px solid blue;
+	background-color:#4d79ff;
+	text-align: center;
+	color:white;
+	font-family:"Times New Roman";	
+}
+#submit_button{
+	width:125px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.table_data{
+	padding: 1px 1px 1px 1px;
+	border: 2px solid blue;
+}
