@@ -7,13 +7,10 @@
 */
 
 	session_start();
-	if (!isset($_SESSION["name"])) {
-		header("location:index.php");
-	}
 	require_once ('filemakerapi/Filemaker.php');
-	$fm = new FileMaker('userData', '172.16.9.62', 'admin', 'Baral@9439');
+	$fm = new FileMaker('blogComment', '172.16.9.62', 'admin', 'Baral@9439');
     $id = $_GET['id']; // $id is now defined
-	$deleteRecord = $fm->newDeleteCommand('userData', $id);
+	$deleteRecord = $fm->newDeleteCommand('blogComment', $id);
 	$result = $deleteRecord->execute();
-    header("Location: allusers.php");
+    header("Location: index.php");
 ?> 

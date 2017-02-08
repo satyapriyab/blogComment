@@ -43,21 +43,38 @@
             return true;
         }
         //----- CRUD Operations -----
-        public function findData($layout, $sortR)
+        public function findData($layout, $sortR, $page)
         {
             if (!$this->DBLogin()) {
                 $this->writeLog("Error in database connection", $this->errorFile);
                 return false;
             }
             $request = $this->connection->newFindAllCommand($layout);
-            $request->addSortRule($sortR, 1);
+            $request->addSortRule($sortR, 1, FILEMAKER_SORT_DESCEND);
+            $request->setRange($page,2);
             $result = $request->execute();
             if (FileMaker::isError($result)) {
                 $this->writeLog("Error in executing findData method", $this->errorFile);
                 return false;
             }
             $this->writeLog("Data Fetch Successful!", $this->logFile);
-            return $result->getRecords();
+            return $result;
+        }
+        public function find($layout, $id)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $request = $this->connection->newFindCommand($layout);
+            $request->addFindCriterion('recordId', $id);
+            $result = $request->execute();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Error in executing findData method", $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Data Fetch Successful!", $this->logFile);
+            return $result->getRecords();;
         }
         public function create($layout)
         {
@@ -67,7 +84,7 @@
             }
             return $this->connection->createRecord($layout);
         }
-        /*
+        
         public function deleteRecord($layout, $id)
         {
             if (!$this->DBLogin()) {
@@ -82,7 +99,7 @@
             }
             $this->writeLog("Deletion Successful!", $this->logFile);
             return $retvar;
-        }*/
+        }
         //----- Helper Methods -----
         public function writeLog($str, $fileName)
         {

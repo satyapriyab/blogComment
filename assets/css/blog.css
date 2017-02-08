@@ -1,0 +1,22 @@
+/* unvisited link */
+
+.spancolor {
+    color: red;
+}
+
+.Title {
+    color:red;
+    font-size: 15px;
+}
+
+.bodyTag {
+    padding : 50px;
+}
+
+a.Readmore:link {
+    color: red;
+}
+
+a.one:link {color:#ff0000;}
+a.one:visited {color:#0000ff;}
+a.one:hover {color:#ffcc00;}
