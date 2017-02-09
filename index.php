@@ -9,45 +9,39 @@
 	//connecting to Filemaker database
 	require_once "./config/config.php";
 	$error = false;
-	
-	//If login button clicked
-    if (isset($_POST['blog-btn']))
-    {	
-		$title = mysql_real_escape_string($_POST['title']);
-        $author = mysql_real_escape_string($_POST['author']);
-        $content = ($_POST['content']);
-		date_default_timezone_set('Asia/Kolkata');
-		$date = date("Y/m/d");
-		$time = date("h:i:sa");
-
-		//check if the fields are entered
-		if((strlen($title) < 1) || (strlen($author) < 1) || (strlen($content) < 1))
-		{
-			$error = true;
-		}
-		
-		if(! $error)
-		{
-			$record = $blogobj->create("blogComment");
-			$record->setField('subject', $title);
-			$record->setField('author', $author);
-			$record->setField('blog', $content);
-			$record->setField('date', $date);
-			$record->setField('time', $time);
-			$record->setField('comment', 0);
-			$result = $record->commit();
-			
-		}
-	}
+	include_once 'phpIndex.php';
 	$PageTitle = "Login";
 	include_once 'header.php';
 ?>
 <body>
 	<div class="container">
 	<!-- Trigger the modal with a button -->
+	<div class="row">
+		<div class="col-xs-4">
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal"
 		data-target="#myModal">Add Post</button>
-
+		</div>
+			<form id="category-form" action="category.php" method="post" role="form">
+			<div class="form-group col-xs-4">
+				<div class="form-group col-xs-6">
+				<label for="category">Select Category:</label>
+				</div>
+				<div class="form-group col-xs-6">
+					<select class="form-control" name="category-index" id="category-index">
+						<option>All</option>
+						<option>Sports</option>
+						<option>Education</option>
+						<option>Politics</option>
+					</select>
+				</div></div>
+			<div class="form-group col-xs-4">
+				<div class="form-group">
+					<input id="category-btn" type="submit" value="Submit">
+					</div>
+				</div>
+			</form>
+			</div>
+		</div>
 		<!-- Modal -->
 		<div class="modal fade" id="myModal" role="dialog">
 			<div class="modal-dialog modal-lg">
@@ -74,6 +68,15 @@
 							<?php if(isset($authorError)) {
 							echo $authorError;}?></span>
 						</div>
+						<div class="form-group col-xs-4">
+							<label for="category">Select Category:</label>
+								<select class="form-control" name="category">
+									<option>All</option>
+									<option>Sports</option>
+									<option>Education</option>
+									<option>Politics</option>
+								</select>
+							</div>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
@@ -99,8 +102,11 @@
 </div>
 
 <?php
-
-	if (isset($_GET['pageId'])) {
+if (isset($_POST['category-btn']))
+    {
+		header("location:category.php");
+	}
+		if (isset($_GET['pageId'])) {
 		$pid = $_GET['pageId'];
 		$result = $blogobj->findData("blogComment", "recordId", $pid);
 	} else {
@@ -109,13 +115,13 @@
     $records = $result->getRecords();
 	$maxRecords = $result->getFoundSetCount();
     $recordsCount = 0;
-	foreach($records as $record) {
+foreach($records as $record) {
 ?>
 	<div class="container">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<center><h2><?php
-				$sub = $record->getField('subject');
+				$sub = htmlspecialchars_decode($record->getField('subject'));
 				echo "<a href=\"http://localhost/fm/article.php?id=
 				".$record->getrecordid()."\">$sub</a>";?></h2></center>
 			</div>
@@ -172,13 +178,15 @@
 	</div>
 <?php
 	}
-	$test=ceil($maxRecords/2);
-	$test1=floor($maxRecords/2);
+	$ceil=ceil($maxRecords/2);
+	if(!isset($pid))
+	   { $pid =0; }
+	$activeId = $pid/2;
 ?>
 <div class="container">
 	<ul class="pagination pagination-lg">
-		<?php for($i=0 ;$i< $test ;$i++) { $sendId = $i * 2 ; $k = $i+1 ; ?>
-		<li><?php echo "<a href=\"http://localhost/fm/index.php?pageId=".$sendId."\">$k</a>";?></li>
+		<?php for( $i = 0 ; $i < $ceil ; $i++ ) { $sendId = $i * 2 ; $k = $i+1 ; ?>
+		<li<?php if($activeId === $i ) {?> class="active" <?php } ?>><?php echo "<a href=\"http://localhost/fm/index.php?pageId=".$sendId."\">$k</a>";?></li>
 		<?php } ?>
 	</ul>
 </div>

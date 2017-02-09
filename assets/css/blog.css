@@ -1,5 +1,9 @@
 /* unvisited link */
-
+a:link {
+    color:white;
+}
+a:visited {color:white;}
+a:hover {color:#ffcc00;}
 .spancolor {
     color: red;
 }

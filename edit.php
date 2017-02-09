@@ -52,7 +52,7 @@
 			{
 				require_once ('filemakerapi/Filemaker.php');
 				$fm = new FileMaker('blogComment', '172.16.9.62', 'admin', 'Baral@9439');
-				$title = mysql_real_escape_string($_POST['title']);
+				$title = htmlspecialchars_decode($_POST['title']);
 				$author = mysql_real_escape_string($_POST['author']);
 				$content = htmlspecialchars_decode($_POST['content']);
 				$editRecord = $fm->newEditCommand('blogComment', $id);
