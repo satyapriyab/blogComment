@@ -7,7 +7,7 @@
 */
 
 	session_start();
-	require_once ('filemakerapi/Filemaker.php');
+	require_once ('config/filemakerapi/Filemaker.php');
 	$fm = new FileMaker('blogComment', '172.16.9.62', 'admin', 'Baral@9439');
     $id = $_GET['id']; // $id is now defined
 	$deleteRecord = $fm->newDeleteCommand('blogComment', $id);

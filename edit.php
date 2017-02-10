@@ -1,8 +1,8 @@
 <?php
 /*
-* File    : update.php
+* File    : edit.php
 * Purpose : Contains all Php code to update the database
-* Created : 25-jan-2017
+* Created : 08-feb-2017
 * Author  : Satyapriya Baral
 */
 
@@ -21,10 +21,10 @@
 	$error = false;
 	//If login button clicked
     if (isset($_POST['blog-btn']))
-    {	
-		$title = mysql_real_escape_string($_POST['title']);
-        $author = mysql_real_escape_string($_POST['author']);
-        $content = mysql_real_escape_string($_POST['content']);
+    {
+		$title = $blogobj->Sanitize($_POST['title']);
+        $author = $blogobj->Sanitize($_POST['author']);
+        $content = $blogobj->Sanitize($_POST['content']);
 		date_default_timezone_set('Asia/Kolkata');
 		$date = date("Y/m/d");
 		$time = date("h:i:sa");
@@ -50,11 +50,11 @@
 		{
 			if (isset($_POST['blog-btn']))
 			{
-				require_once ('filemakerapi/Filemaker.php');
+				require_once ('config/filemakerapi/Filemaker.php');
 				$fm = new FileMaker('blogComment', '172.16.9.62', 'admin', 'Baral@9439');
-				$title = htmlspecialchars_decode($_POST['title']);
-				$author = mysql_real_escape_string($_POST['author']);
-				$content = htmlspecialchars_decode($_POST['content']);
+				$title = $blogobj->Sanitize($_POST['title']);
+				$author = $blogobj->Sanitize($_POST['author']);
+				$content = $blogobj->Sanitize($_POST['content']);
 				$editRecord = $fm->newEditCommand('blogComment', $id);
 				$editRecord->setField('subject', $title);
 				$editRecord->setField('author', $author);
@@ -69,8 +69,20 @@
 	$PageTitle = "Update";
 	include_once 'header.php';
 ?>
-
-<body class="bodyTag">
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a href="index.php">Home</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+</nav>
 	<div class= "container">
 	<form id="blog-form" action="#" method="post" role="form">
 					<div><span class="spancolor" id="name-error">

@@ -1,8 +1,8 @@
 <?php
 /*
-* File    : personal.php
-* Purpose : Contains all html data and Php data for showing personal info
-* Created : 20-jan-2017
+* File    : article.php
+* Purpose : Contains all html data and Php data for showing the full article
+* Created : 08-feb-2017
 * Author  : Satyapriya Baral
 */
     session_start();
@@ -27,8 +27,18 @@
     require_once "./config/config.php";
     $error = false;
        
-    //If login button clicked
     ?>
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+		</div>
+		<ul class="nav navbar-nav">
+            <li><a href="index.php">Home</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		</ul>
+	</div>
+</nav>
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -53,26 +63,29 @@
     </div>
 </div>
 <div class="container">
-    
-        <form id="comment-form" action="#" method="post" role="form">
-            <div class="well  col-xs-8">
-              <div class="row ">  
-            <div class=" row col-xs-12">
-                <input class="form-control" id="name" type="text" placeholder="Comment As">
-            </div></div>
+    <form id="comment-form" action="#" method="post" role="form">
+        <div class="well  col-xs-8">
+            <div class="row ">  
+                <div class=" row col-xs-12">
+                    <input class="form-control" id="name" type="text" placeholder="Comment As">
+                </div>
+            </div>
             <!--</div>-->
             <div class="row">
-            <div class=" row col-xs-12">
+                <div class=" row col-xs-12">
                     <label for="Comment"></label>
                     <textarea class="form-control " rows="5"
                         name="commentData" id="commentData"
                         placeholder="Comment"></textarea>
-            </div></div>
-             <div class="row">
-            <div class="form-group">
-                <input id="submit" type="button" value="Submit">
-            </div></div></div>
-        </form> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <input id="submit" type="button" value="Comment">
+                </div>
+            </div>
+        </div>
+    </form> 
 </div>
 <?php
     $records = $blogobj->find("blogComment", $rid);

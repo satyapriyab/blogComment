@@ -24,7 +24,16 @@
             $this->logFile = __DIR__."\..\log\logResult.log";
             $this->timeZone = "Asia/Kolkata";
         }
-        //----- Initialize function -----
+        
+        /**
+        * Function to get database criteria.
+        *
+        * @param 1. $db - contains the database name.
+        *        2. $host - contains the host name to be connected.
+        *        3. $user - contains the username of the host.
+        *        4. $pass - contains the password of the user.
+        * @return null.
+        */
         public function initDB($db, $host, $user, $pass)
         {
             $this->databaseName = $db;
@@ -32,6 +41,13 @@
             $this->userName = $user;
             $this->password = $pass;
         }
+        
+        /**
+        * Function to connect to the Filemaker Database.
+        *
+        * @param null.
+        * @return - boolian value of the connection made or not.
+        */
         public function DBLogin()
         {
             $this->connection = new FileMaker($this->databaseName, $this->hostName, $this->userName, $this->password);
@@ -42,15 +58,32 @@
             $this->writeLog("Connection Successful!", $this->logFile);
             return true;
         }
+        
         //----- CRUD Operations -----
-        public function findData($layout, $sortR, $page)
+        /**
+        * Function to search the data by its soring order.
+        *
+        * @param 1. $layout - data required to get the layout name.
+        *        2. $sortR - contains the sorting order of data.
+        *        3. $page - contains the index of the page to be displayed.
+        *        4. $category - contains the category details according to which to be searched.
+        * @return - Filemaker results of data found.
+        */
+        public function findData($layout, $sortR, $page ,$category)
         {
             if (!$this->DBLogin()) {
                 $this->writeLog("Error in database connection", $this->errorFile);
                 return false;
             }
-            $request = $this->connection->newFindAllCommand($layout);
+            if($category === 'Sports') { $categoryIndex = 2; }
+            elseif($category === 'Education') { $categoryIndex = 3; }
+            elseif($category === 'Politics') { $categoryIndex = 4; }
+            $request = $this->connection->newFindCommand($layout);
             $request->addSortRule($sortR, 1, FILEMAKER_SORT_DESCEND);
+            if($category != 'All')
+            {
+                $request->addFindCriterion('category',$categoryIndex);
+            }
             $request->setRange($page,2);
             $result = $request->execute();
             if (FileMaker::isError($result)) {
@@ -60,6 +93,14 @@
             $this->writeLog("Data Fetch Successful!", $this->logFile);
             return $result;
         }
+        
+        /**
+        * Function to find the data by its record.
+        *
+        * @param 1. $layout - data required to get the layout name.
+        *        2. $id - contains the record id of which to be found.
+        * @return - Filemaker results of data found.
+        */
         public function find($layout, $id)
         {
             if (!$this->DBLogin()) {
@@ -76,6 +117,37 @@
             $this->writeLog("Data Fetch Successful!", $this->logFile);
             return $result->getRecords();;
         }
+        
+        /**
+        * Function to search the data by its article name.
+        *
+        * @param 1. $layout - data required to get the layout name.
+        *        2. $articleName - contains the name of article to be searched.
+        * @return - Filemaker results of data found.
+        */
+        public function findArticle($layout, $articleName)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $request = $this->connection->newFindCommand($layout);
+            $request->addFindCriterion('subject', $articleName);
+            $result = $request->execute();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Error in executing findData method", $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Data Fetch Successful!", $this->logFile);
+            return $result->getRecords();;
+        }
+        
+        /**
+        * Function to create a record.
+        *
+        * @param 1. $layout - data required to get the layout name.
+        * @return - Filemaker results for record creation.
+        */
         public function create($layout)
         {
             if (!$this->DBLogin()) {
@@ -85,6 +157,13 @@
             return $this->connection->createRecord($layout);
         }
         
+        /**
+        * Function to delete a record by its record id.
+        *
+        * @param 1. $layout - data required to get the layout name.
+        *        2. $id - contains record id of the record to be deleted.
+        * @return - Filemaker results of deleted record.
+        */
         public function deleteRecord($layout, $id)
         {
             if (!$this->DBLogin()) {
@@ -101,11 +180,32 @@
             return $retvar;
         }
         //----- Helper Methods -----
+        /**
+        * Function to log the errors and success in a text document.
+        *
+        * @param 1. $str - data that to be written in text document.
+        *        2. $filename - contains filename where the data will be written.
+        * @return null.
+        */
         public function writeLog($str, $fileName)
         {
             date_default_timezone_set($this->timeZone);
             $dateTime = date("Y-m-d h:i:sa");
             error_log("[".$dateTime."]-".$str."\n", 3, $fileName);
+        }
+        
+        /**
+        * Function to sanitize the value that will be stored in the database.
+        *
+        * @param 1. $value - contains the value to be sanitized.
+        * @return - Returns the value after sanitizing.
+        */
+        public function Sanitize($value)
+        {
+            $retvar = trim($value);
+            $retvar = strip_tags($retvar);
+            $retvar = htmlspecialchars($retvar);
+            return $retvar;
         }
     }
  ?>

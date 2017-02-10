@@ -1,4 +1,11 @@
 <?php
+/*
+* File    : commentDisplay.php
+* Purpose : Contains all Php and html codes to create and display the comments.
+* Created : 08-feb-2017
+* Author  : Satyapriya Baral
+*/
+
 include_once 'header.php';
 session_start();
     //Connecting to Filemaker database
@@ -14,35 +21,30 @@ session_start();
         $comment = $record->getField('comment');
         $id = $record->getField('id');
         }
-        $name = mysql_real_escape_string($_POST['name1']);
-        $commentTab = htmlspecialchars_decode($_POST['comment1']);
+        $name = mysql_real_escape_string($_POST['commentName']);
+        $commentTab = htmlspecialchars_decode($_POST['commentComment']);
         date_default_timezone_set('Asia/Kolkata');
         $date = date("Y/m/d");
         $time = date("h:i:sa");
-                require_once ('filemakerapi/Filemaker.php');
-                $fm = new FileMaker('blogComment', '172.16.9.62', 'admin', 'Baral@9439');
-                $editRecord = $fm->newEditCommand('blogComment', $rid);
-                $comment = $comment + 1;
-                $editRecord->setField('comment', $comment);
-                $result = $editRecord->execute();
-                $record = $blogobj->create("comment");
-                $record->setField('name', $name);
-                $record->setField('commentData', $commentTab);
-                $record->setField('date', $date);
-                $record->setField('time', $time);
-                $record->setField('fkId', $id);
-                $result = $record->commit();
+        require_once ('config/filemakerapi/Filemaker.php');
+        $fm = new FileMaker('blogComment', '172.16.9.62', 'admin', 'Baral@9439');
+        $editRecord = $fm->newEditCommand('blogComment', $rid);
+        $comment = $comment + 1;
+        $editRecord->setField('comment', $comment);
+        $result = $editRecord->execute();
+        $record = $blogobj->create("comment");
+        $record->setField('name', $name);
+        $record->setField('commentData', $commentTab);
+        $record->setField('date', $date);
+        $record->setField('time', $time);
+        $record->setField('fkId', $id);
+        $result = $record->commit();
    /*  $records = $blogobj->find("blogComment", $rid);
     foreach($records as $record){
         $commentRecords= $record->getRelatedSet('comment');
         if (FileMaker::isError($commentRecords)) {
         } else {
-                foreach($commentRecords as $commentRecord){
-            
-            if(($commentTab === htmlspecialchars_decode($commentRecord->getField('comment::commentData'))) &&
-                 ($name === $commentRecord->getField('comment::name')) &&
-                 ($date === $commentRecord->getField('comment::date')) &&
-                 ($time === $commentRecord->getField('comment::time'))) {?>
+                foreach($commentRecords as $commentRecord){?>
             <div class="container">
                 <div class="panel panel-info">
                     <div class="panel-heading">
@@ -70,7 +72,7 @@ session_start();
             <?php
             }
             }
-        }
-    }*/
+        }*/
+
     include_once 'footer.php';
 ?>

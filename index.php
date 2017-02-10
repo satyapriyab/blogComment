@@ -5,43 +5,57 @@
 * Created : 06-Feb-2017
 * Author  : Satyapriya Baral
 */
+
 	session_start();
 	//connecting to Filemaker database
 	require_once "./config/config.php";
 	$error = false;
 	include_once 'phpIndex.php';
-	$PageTitle = "Login";
+	$PageTitle = "Blog";
 	include_once 'header.php';
 ?>
+
+<!-- Navbar Section -->
 <body>
-	<div class="container">
-	<!-- Trigger the modal with a button -->
-	<div class="row">
-		<div class="col-xs-4">
-		<button type="button" class="btn btn-info btn-lg" data-toggle="modal"
-		data-target="#myModal">Add Post</button>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+			</div>
+			<ul class="nav navbar-nav">
+				<li><button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+				data-target="#myModal">Add Post</button></li>
+				<li class="active"><a href="index.php">Home</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+				<input type="text" class="form-control search" id="article-name"
+				placeholder="Search Through Article.." ></li>
+			</ul>
 		</div>
-			<form id="category-form" action="category.php" method="post" role="form">
-			<div class="form-group col-xs-4">
-				<div class="form-group col-xs-6">
-				<label for="category">Select Category:</label>
-				</div>
-				<div class="form-group col-xs-6">
-					<select class="form-control" name="category-index" id="category-index">
-						<option>All</option>
-						<option>Sports</option>
-						<option>Education</option>
-						<option>Politics</option>
-					</select>
-				</div></div>
-			<div class="form-group col-xs-4">
-				<div class="form-group">
-					<input id="category-btn" type="submit" value="Submit">
+</nav>
+	
+	<!-- Category Search Section -->
+	<div class="container">
+		<div class="well col-xs-8">
+			<form id="category-form" action="index.php" method="post" role="form">
+				<div class="row">
+					<div class="col-xs-3">
+						<label for="category">Select Category:</label>
+					</div>
+					<div class="col-xs-5">
+						<select class="form-control" name="category-index" id="selectCategory">
+							<option><?php if(isset($category)){ echo $category;}?></option>
+							<option>All</option>
+							<option>Sports</option>
+							<option>Education</option>
+							<option>Politics</option>
+						</select>
 					</div>
 				</div>
 			</form>
-			</div>
 		</div>
+	</div>
+	<div id="articleData"></div>
 		<!-- Modal -->
 		<div class="modal fade" id="myModal" role="dialog">
 			<div class="modal-dialog modal-lg">
@@ -70,7 +84,7 @@
 						</div>
 						<div class="form-group col-xs-4">
 							<label for="category">Select Category:</label>
-								<select class="form-control" name="category">
+								<select class="form-control"  name="category">
 									<option>All</option>
 									<option>Sports</option>
 									<option>Education</option>
@@ -101,20 +115,8 @@
 	</div>
 </div>
 
+<!-- Records Display Part -->
 <?php
-if (isset($_POST['category-btn']))
-    {
-		header("location:category.php");
-	}
-		if (isset($_GET['pageId'])) {
-		$pid = $_GET['pageId'];
-		$result = $blogobj->findData("blogComment", "recordId", $pid);
-	} else {
-		$result = $blogobj->findData("blogComment", "recordId", 0);
-	}
-    $records = $result->getRecords();
-	$maxRecords = $result->getFoundSetCount();
-    $recordsCount = 0;
 foreach($records as $record) {
 ?>
 	<div class="container">
@@ -176,6 +178,7 @@ foreach($records as $record) {
 			</div>
 		</div>
 	</div>
+<!-- Pagination Section -->
 <?php
 	}
 	$ceil=ceil($maxRecords/2);
@@ -186,7 +189,8 @@ foreach($records as $record) {
 <div class="container">
 	<ul class="pagination pagination-lg">
 		<?php for( $i = 0 ; $i < $ceil ; $i++ ) { $sendId = $i * 2 ; $k = $i+1 ; ?>
-		<li<?php if($activeId === $i ) {?> class="active" <?php } ?>><?php echo "<a href=\"http://localhost/fm/index.php?pageId=".$sendId."\">$k</a>";?></li>
+		<li<?php if($activeId === $i ) {?> class="active" <?php } ?>>
+		<?php echo "<a href=\"http://localhost/fm/index.php?pageId=".$sendId."&category=" .$category."\">$k</a>";?></li>
 		<?php } ?>
 	</ul>
 </div>
