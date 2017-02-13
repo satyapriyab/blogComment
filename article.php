@@ -90,6 +90,10 @@
 <div id="commentSection">
 <?php
     $records = $blogobj->findComment("comment", $id);
+	
+	if (! $records) {
+    }
+	else {
     ?>
     <div class="container">
         <b><h3>COMMENTS  :</h3></b>
@@ -117,10 +121,13 @@
                     </div>
                 </div>
             </div>
-        </div>
     <?php
     }
+	}
 ?>
+</div>
+<div class="preload">
+	<img src=""/>
 </div>
 <div id="output"></div>
 <?php

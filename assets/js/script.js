@@ -139,13 +139,13 @@ $(document).ready(function(){
         
         errorTitle = false;
        // errorAuthor = false;
-        errorContent = false;
+        //errorContent = false;
         
         checkTitle();
        // checkAuthor(); 
-        checkContent();
+        //checkContent();
         
-        if(errorTitle === false  && errorContent === false)
+        if(errorTitle === false)
         {
                return true;
         }else{

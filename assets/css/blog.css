@@ -1,9 +1,22 @@
-/* unvisited link */
+/*
+* File    : blog.css
+* Purpose : Contains all css codes for the blog.
+* Created : 08-feb-2017
+* Author  : Satyapriya Baral
+*/
+
 a:link {
     color:white;
 }
-a:visited {color:white;}
-a:hover {color:#ffcc00;}
+
+a:visited {
+    color:white;
+}
+
+a:hover {
+    color:#ffcc00;
+}
+
 .spancolor {
     color: red;
 }
@@ -20,7 +33,3 @@ a:hover {color:#ffcc00;}
 a.Readmore:link {
     color: red;
 }
-
-a.one:link {color:#ff0000;}
-a.one:visited {color:#0000ff;}
-a.one:hover {color:#ffcc00;}
