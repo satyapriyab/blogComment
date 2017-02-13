@@ -71,16 +71,12 @@
 						<div class="form-group">
 							<input type="text" class="form-control" id="title"
 							name="title" placeholder="Title">
-							<span class="spancolor" id="title-error">
-							<?php if(isset($titleError)) {
-							echo $titleError; } ?> </span>
+							<span class="spancolor" id="title-error"></span>
 						</div>
 						<div class="form-group">
 							<input type="text" class="form-control" id="author"
 							name="author" placeholder="Author">
-							<span class="spancolor" id="author-error">
-							<?php if(isset($authorError)) {
-							echo $authorError;}?></span>
+							<span class="spancolor" id="author-error"></span>
 						</div>
 						<div class="form-group col-xs-4">
 							<label for="category">Select Category:</label>
@@ -98,9 +94,7 @@
 							<textarea class="form-control col-xs-12 ckeditor" name="content"rows="10"
 								name="content" id="content"
 								placeholder="Content"></textarea>
-								<span class="spancolor" id="content-error">
-								<?php if(isset($contentError)) {
-								echo $contentError; } ?> </span>
+								<span class="spancolor" id="content-error"></span>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -163,21 +157,24 @@ foreach($records as $record) {
 			</div>
 			<div class="panel-footer">
 				<div class="row">
-					<div class="col-sm-4"><button class="btn btn-danger">
-						<?php echo "<a href=\"http://localhost/fm/delete.php?id=
-						".$record->getrecordid()."\">Delete</a>";?></button>
+					<div class="col-sm-4">
+						<button class="btn btn-danger"
+					onClick="window.location='http://localhost/fm/delete.php?id=<?php echo $record->getrecordid() ?>'">
+					Delete</button>
 					</div>
 					<div class="col-sm-4"><b>No of Comments  : </b>
 						<?php echo  $record->getField('comment');?>
 					</div>
-					<div class="col-sm-4"><button class="btn btn-warning">
-						<?php echo "<a href=\"http://localhost/fm/edit.php?id=
-						".$record->getrecordid()."\">Edit</a>";?></button>
+					<div class="col-sm-4">
+						<button class="btn btn-warning"
+					onClick="window.location='http://localhost/fm/edit.php?id=<?php echo $record->getrecordid() ?>'">
+					Edit</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
 <!-- Pagination Section -->
 <?php
 	}

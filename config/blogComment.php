@@ -125,14 +125,42 @@
         *        2. $articleName - contains the name of article to be searched.
         * @return - Filemaker results of data found.
         */
-        public function findArticle($layout, $articleName)
+        public function findArticle($layout, $articleData)
         {
             if (!$this->DBLogin()) {
                 $this->writeLog("Error in database connection", $this->errorFile);
                 return false;
             }
             $request = $this->connection->newFindCommand($layout);
-            $request->addFindCriterion('subject', $articleName);
+           // $request->addFindCriterion('subject', $articleData);
+            $request->addFindCriterion('author', $articleData);
+            $result = $request->execute();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Error in executing findData method", $this->errorFile);
+                return false;
+            }
+            else {
+                $this->writeLog("Data Fetch Successful!", $this->logFile);
+                return $result->getRecords();
+            }
+        }
+        
+        /**
+        * Function to comment that to be displayed.
+        *
+        * @param 1. $layout - data required to get the layout name.
+        *        2. $id - contains the primary key of blogComment layout.
+        * @return - Filemaker results of data found.
+        */
+        public function findComment($layout, $id)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $request = $this->connection->newFindCommand($layout);
+            $request->addFindCriterion('fkId', $id);
+            $request->addSortRule('commentRecordId', 1, FILEMAKER_SORT_DESCEND);
             $result = $request->execute();
             if (FileMaker::isError($result)) {
                 $this->writeLog("Error in executing findData method", $this->errorFile);
@@ -141,7 +169,6 @@
             $this->writeLog("Data Fetch Successful!", $this->logFile);
             return $result->getRecords();;
         }
-        
         /**
         * Function to create a record.
         *

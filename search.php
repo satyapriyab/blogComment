@@ -5,20 +5,26 @@
 * Created : 08-feb-2017
 * Author  : Satyapriya Baral
 */
-
+    include_once 'header.php';
+    ?>
+    <?php
     require_once "./config/config.php";
 	$error = false;
-    $articleName = htmlspecialchars_decode($_POST['articleName']);
-	$records = $blogobj->findArticle("blogComment",$articleName);
+    $articleData = htmlspecialchars_decode($_POST['articleData']);
+	$records = $blogobj->findArticle("blogComment",$articleData);
+    
 	$PageTitle = "Blog";
-	include_once 'header.php';
-    if (FileMaker::isError($records)) {
+	
+    if (! $records) {
         echo "Sorry No Records Found";
+		exit;
     }
     else {
-    foreach($records as $record){
-    ?>
-    <div class="container">
+        //echo $records;
+        foreach($records as $record){
+        ?>
+        <body>
+        <div class="container">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<center><h2><?php
@@ -62,16 +68,17 @@
 			</div>
 			<div class="panel-footer">
 				<div class="row">
-					<div class="col-sm-4"><button class="btn btn-danger">
-						<?php echo "<a href=\"http://localhost/fm/delete.php?id=
-						".$record->getrecordid()."\">Delete</a>";?></button>
+					<div class="col-sm-4"><button class="btn btn-danger"
+					onClick="window.location='http://localhost/fm/delete.php?id=<?php echo $record->getrecordid() ?>'">
+					Delete</button>
 					</div>
 					<div class="col-sm-4"><b>No of Comments  : </b>
 						<?php echo  $record->getField('comment');?>
 					</div>
-					<div class="col-sm-4"><button class="btn btn-warning">
-						<?php echo "<a href=\"http://localhost/fm/edit.php?id=
-						".$record->getrecordid()."\">Edit</a>";?></button>
+					<div class="col-sm-4">
+						<button class="btn btn-warning"
+					onClick="window.location='http://localhost/fm/edit.php?id=<?php echo $record->getrecordid() ?>'">
+					Edit</button>
 					</div>
 				</div>
 			</div>
@@ -79,6 +86,9 @@
 	</div>
 
 <?php
-    }}
+        }
+    }
+	exit;
 	include_once 'footer.php';
+
 ?>

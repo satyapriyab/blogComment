@@ -55,7 +55,7 @@
                 <hr>
             </div>
             <div class="row">
-                <div class="col-sm-12"><b>Content  : </b>
+                <div class="col-sm-12">
                     <?php if (isset($blog)) { echo $blog;}?>
                 </div>
             </div>
@@ -87,45 +87,41 @@
         </div>
     </form> 
 </div>
+<div id="commentSection">
 <?php
-    $records = $blogobj->find("blogComment", $rid);
-    foreach($records as $record){
-        $commentRecords= $record->getRelatedSet('comment');
-        if (FileMaker::isError($commentRecords)) {
-        } else {
-            ?>
-            <div class="container">
-                <b><h3>COMMENTS  :</h3></b>
-            </div>
-            <?php
-                foreach($commentRecords as $commentRecord){
-            ?>
-            <div class="container">
-                <div class="well  col-xs-8">
-                        <div class="row">
-                            <div class="col-sm-4"><b>Name  :
-                                </b><?php echo  $commentRecord->getField('comment::name');?></div>
-                            <div class="col-sm-4"><b>Date  :
-                                </b><?php echo  $commentRecord->getField('comment::date');?></div>
-                            <div class="col-sm-4"><b>Time  :
-                                </b><?php echo  $commentRecord->getField('comment::time');?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-8"><b>Comment  : </b>
-                            <?php
-                                $commentData = htmlspecialchars_decode($commentRecord->getField('comment::commentData'));
-                                echo $commentData
-                            ?>
-                            </div>
+    $records = $blogobj->findComment("comment", $id);
+    ?>
+    <div class="container">
+        <b><h3>COMMENTS  :</h3></b>
+    </div>
+    <?php
+    foreach($records as $record) {
+        ?>
+        <div class="container">
+            <div class="well  col-xs-8">
+                <div class="row">
+                    <div class="col-sm-4"><b>Name  :
+                        </b><?php echo  $record->getField('name');?></div>
+                    <div class="col-sm-4"><b>Date  :
+                        </b><?php echo  $record->getField('date');?></div>
+                    <div class="col-sm-4"><b>Time  :
+                        </b><?php echo  $record->getField('time');?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8"><b>Comment  : </b>
+                        <?php
+                            $commentData = htmlspecialchars_decode($record->getField('commentData'));
+                            echo $commentData
+                        ?>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php
-            }
-        }
+        </div>
+    <?php
     }
 ?>
+</div>
 <div id="output"></div>
 <?php
 include_once 'footer.php';
