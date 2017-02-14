@@ -132,8 +132,26 @@
                 return false;
             }
             $request = $this->connection->newFindCommand($layout);
-           // $request->addFindCriterion('subject', $articleData);
             $request->addFindCriterion('author', $articleData);
+            $result = $request->execute();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Error in executing findData method", $this->errorFile);
+                return false;
+            }
+            else {
+                $this->writeLog("Data Fetch Successful!", $this->logFile);
+                return $result->getRecords();
+            }
+        }
+        
+        public function findArticleContent($layout, $articleData)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $request = $this->connection->newFindCommand($layout);
+            $request->addFindCriterion('subject', $articleData);
             $result = $request->execute();
             if (FileMaker::isError($result)) {
                 $this->writeLog("Error in executing findData method", $this->errorFile);
@@ -205,6 +223,63 @@
             }
             $this->writeLog("Deletion Successful!", $this->logFile);
             return $retvar;
+        }
+        
+        /**
+        * Function to edit a record by its record id.
+        *
+        * @param 1. $layout - data required to get the layout name.
+        *        2. $id - contains record id of the record to be deleted.
+        *        3. $comment - contains the data of no of comments in the record.
+        * @return - Null.
+        */
+        public function editRecord($layout, $id, $comment)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $editcmd = $this->connection->newEditCommand($layout, $id);
+            $comment = $comment + 1;
+            $editcmd->setField('comment', $comment);
+            $retvar = $editcmd->execute();
+            if (FileMaker::isError($retvar)) {
+                $this->writeLog("Error in editing the file", $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Edit Successful!", $this->logFile);
+        }
+        
+        /**
+        * Function to edit a Article by its record id.
+        *
+        * @param 1. $layout - data required to get the layout name.
+        *        2. $id - contains record id of the record to be deleted.
+        *        3. $title - contains data of the title of the blog.
+        *        4. $author - contains name of the author.
+        *        5. $content - contains the blog data.
+        *        6. $date - contains the date when the blog is posted.
+        *        7. $time - contains the time when the blog is posted.
+        * @return - Null.
+        */
+        public function editArticle($layout, $id, $title, $author, $content, $date, $time)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $editRecord = $this->connection->newEditCommand($layout, $id);
+            $editRecord->setField('subject', $title);
+			$editRecord->setField('author', $author);
+			$editRecord->setField('blog', $content);
+			$editRecord->setField('date', $date);
+			$editRecord->setField('time', $time);
+			$result = $editRecord->execute();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Error in editing the file", $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Edit Successful!", $this->logFile);
         }
         //----- Helper Methods -----
         /**

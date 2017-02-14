@@ -9,9 +9,12 @@
 	session_start();
 	//connecting to Filemaker database
 	require_once "./config/config.php";
-	$error = false;
+	
+	//contains all the php codes for the creation of record and retriving it.
 	include_once 'phpIndex.php';
 	$PageTitle = "Blog";
+	
+	//contains the header file of html.
 	include_once 'header.php';
 ?>
 
@@ -29,7 +32,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li>
 				<input type="text" class="form-control search" id="article-name"
-				placeholder="Search Through Article.." ></li>
+				placeholder="Search By Author.." ></li>
 			</ul>
 		</div>
 </nav>
@@ -43,6 +46,8 @@
 						<label for="category">Select Category:</label>
 					</div>
 					<div class="col-xs-5">
+						
+						<!-- On select of category the articles with that category are shown -->
 						<select class="form-control" name="category-index" id="selectCategory">
 							<option><?php if(isset($category)){ echo $category;}?></option>
 							<option>All</option>
@@ -108,7 +113,8 @@
 		</div>
 	</div>
 </div>
-
+<div id="indexData">
+	
 <!-- Records Display Part -->
 <?php
 foreach($records as $record) {
@@ -116,6 +122,8 @@ foreach($records as $record) {
 	<div class="container">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
+				
+				<!-- Href link to redirect to the article page-->
 				<center><h2><?php
 				$sub = htmlspecialchars_decode($record->getField('subject'));
 				echo "<a href=\"http://localhost/fm/article.php?id=
@@ -137,6 +145,8 @@ foreach($records as $record) {
 				<div class="row">
 					<div class="col-sm-12">
 						<?php
+						
+							//code to print maximum of 300 charecters in the UI
 							$contentBlog = htmlspecialchars_decode($record->getField('blog'));						
 							if(strlen($contentBlog) <= 300) {
 								echo $contentBlog;
@@ -158,16 +168,22 @@ foreach($records as $record) {
 			<div class="panel-footer">
 				<div class="row">
 					<div class="col-sm-4">
+						
+						<!-- On click page is loaded after deletion of record by record id-->
 						<button class="btn btn-danger"
-					onClick="window.location='http://localhost/fm/delete.php?id=<?php echo $record->getrecordid() ?>'">
+					onClick="window.location=
+					'http://localhost/fm/delete.php?id=<?php echo $record->getrecordid() ?>'">
 					Delete</button>
 					</div>
 					<div class="col-sm-4"><b>No of Comments  : </b>
 						<?php echo  $record->getField('comment');?>
 					</div>
 					<div class="col-sm-4">
+						
+						<!-- On click page is loaded after edit of record by record id-->
 						<button class="btn btn-warning"
-					onClick="window.location='http://localhost/fm/edit.php?id=<?php echo $record->getrecordid() ?>'">
+					onClick="window.location=
+					'http://localhost/fm/edit.php?id=<?php echo $record->getrecordid() ?>'">
 					Edit</button>
 					</div>
 				</div>
@@ -183,13 +199,16 @@ foreach($records as $record) {
 	   { $pid =0; }
 	$activeId = $pid/2;
 ?>
+
 <div class="container">
 	<ul class="pagination pagination-lg">
 		<?php for( $i = 0 ; $i < $ceil ; $i++ ) { $sendId = $i * 2 ; $k = $i+1 ; ?>
 		<li<?php if($activeId === $i ) {?> class="active" <?php } ?>>
-		<?php echo "<a href=\"http://localhost/fm/index.php?pageId=".$sendId."&category=" .$category."\">$k</a>";?></li>
+		<?php echo "<a href=\"http://localhost/fm/index.php?pageId="
+		.$sendId."&category=" .$category."\">$k</a>";?></li>
 		<?php } ?>
 	</ul>
+</div>
 </div>
 <?php
 	include_once 'footer.php';

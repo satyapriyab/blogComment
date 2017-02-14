@@ -6,12 +6,19 @@
 * Author  : Satyapriya Baral
 */
     session_start();
-    $PageTitle = "Home";
+    $PageTitle = "Article";
+	
+	//contains all the HTML header codes.
     include_once 'header.php';
+	
     //Connecting to Filemaker database
     require_once "./config/config.php";
+	
+	//Record id is retrived from the URL
     $rid = $_GET['id'];
     $_SESSION["rid"] = $rid;
+	
+	//The record of the article is collected by its record id from the database
     $records = $blogobj->find("blogComment", $rid);
     foreach($records as $record){
         $title = $record->getField('subject');
@@ -23,11 +30,12 @@
         $id = $record->getField('id');
         $_SESSION["id"] = $id;
     }
-    //connecting to Filemaker database
-    require_once "./config/config.php";
+	
     $error = false;
        
     ?>
+	
+	<!--Navbar to get back to the home page-->
 <nav class="navbar navbar-inverse">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -39,6 +47,8 @@
 		</ul>
 	</div>
 </nav>
+
+<!--Data of the article are shown in the panel here-->
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -62,6 +72,8 @@
         </div>
     </div>
 </div>
+
+<!--Codes for making text area for comments and on click submit will make a Ajax call-->
 <div class="container">
     <form id="comment-form" action="#" method="post" role="form">
         <div class="well  col-xs-8">
@@ -87,8 +99,11 @@
         </div>
     </form> 
 </div>
+
+<!--Codes for displaying the comments-->
 <div id="commentSection">
 <?php
+
     $records = $blogobj->findComment("comment", $id);
 	
 	if (! $records) {
@@ -123,12 +138,16 @@
             </div>
     <?php
     }
-	}
+}
 ?>
 </div>
+
+<!--Spinner implemented by ajax-->
 <div class="preload">
-	<img src=""/>
+	<img src="spinner.gif"/>
 </div>
+
+<!--After Ajax call the comments are displayed here-->
 <div id="output"></div>
 <?php
 include_once 'footer.php';

@@ -5,12 +5,15 @@
 * Created : 25-jan-2017
 * Author  : Satyapriya Baral
 */
-
-	session_start();
-	require_once ('config/filemakerapi/Filemaker.php');
-	$fm = new FileMaker('blogComment', '172.16.9.62', 'admin', 'Baral@9439');
-    $id = $_GET['id']; // $id is now defined
-	$deleteRecord = $fm->newDeleteCommand('blogComment', $id);
-	$result = $deleteRecord->execute();
+	//connecting to the database
+	require_once "./config/config.php";
+	
+	//Record id of the blog is initialized from the URL.
+    $id = $_GET['id']; 
+	
+	//command to delete the record.
+	$blogobj->deleteRecord("blogComment", $id);
+	
+	//After deletion redirect to the index page.
     header("Location: index.php");
 ?> 

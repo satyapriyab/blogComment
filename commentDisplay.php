@@ -6,12 +6,15 @@
 * Author  : Satyapriya Baral
 */
 
-include_once 'header.php';
+    //contains all the HTML header codes.
+    include_once 'header.php';
 
     session_start();
     //Connecting to Filemaker database
     require_once "./config/config.php";
     $rid = $_SESSION["rid"];
+    
+    //command to get blog data from the database
     $records = $blogobj->find("blogComment", $rid);
     foreach($records as $record) {
         $title = $record->getField('subject');
@@ -22,17 +25,16 @@ include_once 'header.php';
         $comment = $record->getField('comment');
         $id = $record->getField('id');
     }
-    $name = mysql_real_escape_string($_POST['commentName']);
-    $commentTab = htmlspecialchars_decode($_POST['commentComment']);
+    $name = $blogobj->Sanitize($_POST['commentName']);
+    $commentTab = $blogobj->Sanitize($_POST['commentComment']);
     date_default_timezone_set('Asia/Kolkata');
     $date = date("Y/m/d");
     $time = date("h:i:sa");
-    require_once ('config/filemakerapi/Filemaker.php');
-    $fm = new FileMaker('blogComment', '172.16.9.62', 'admin', 'Baral@9439');
-    $editRecord = $fm->newEditCommand('blogComment', $rid);
-    $comment = $comment + 1;
-    $editRecord->setField('comment', $comment);
-    $result = $editRecord->execute();
+    
+    //command for editing the comment section
+    $blogobj->editRecord("blogComment", $rid, $comment);
+    
+    //command to create a comment in the database
     $record = $blogobj->create("comment");
     $record->setField('name', $name);
     $record->setField('commentData', $commentTab);
@@ -40,6 +42,8 @@ include_once 'header.php';
     $record->setField('time', $time);
     $record->setField('fkId', $id);
     $result = $record->commit();
+    
+    //command to find the comment record from the database
     $records = $blogobj->findComment("comment", $id);
     ?>
     <div class="container">

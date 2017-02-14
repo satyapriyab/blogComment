@@ -8,6 +8,7 @@
 
 $(document).ready(function(){
      
+     //errors are hidden and will show when error occurs.
      $("#author-error").hide();
      $("#title-error").hide();
      
@@ -26,6 +27,7 @@ $(document).ready(function(){
      * @param Null
      * @return Null
      */
+     $('.preload').hide();
      $("#submit").click(function(){
           var articleName = $("#name").val();
           var articleComment = $("#commentData").val();
@@ -38,7 +40,8 @@ $(document).ready(function(){
                // AJAX Code To Submit Form.
                $.post('commentDisplay.php', { commentName: articleName , commentComment: articleComment}, function(data) {
                $('#commentSection').hide();
-               $('#output').show();
+               $('.preload').show();
+               $(".preload").fadeOut(2000);
                $('#output').html(data);
                });
           }
@@ -55,10 +58,15 @@ $(document).ready(function(){
           var articleData = $('#article-name').val();
           if($.trim(articleData) === '')
           {
-               $('#articleData').html('Please Enter Searching Keyword');
+               $('#articleData').hide();
+               $('#indexData').show();
+              // $('#articleData').html('Please Enter Searching Keyword');
           } else {
                $.post('search.php', { articleData: articleData }, function(data) {
+                    $('#indexData').hide();
+                    $('#articleData').show();
                     $('#articleData').html(data);
+                    $(".author:contains('"+articleData+"')").css("color", "blue");
                });
           }
      });
@@ -71,12 +79,7 @@ $(document).ready(function(){
      */
      $("#selectCategory").on("change",function(){
           var selected = this.value;
-               var category;
-               if (selected === 'All') { category = 'All';}
-               else if (selected === 'Sports') { category = 'Sports';}
-               else if (selected === 'Politics') { category = 'Politics';}
-               else if (selected === 'Education') { category = 'Education';}
-               window.location.href = "http://localhost/fm/index.php?pageId=0&category="+category;
+          window.location.href = "http://localhost/fm/index.php?pageId=0&category="+selected;
      });
      
      /**
@@ -120,30 +123,18 @@ $(document).ready(function(){
           }
      }
      
-     function checkContent(){
-          var content = $("#content").val().length;
-          if(content < 1)  
-          {
-               $("#content-error").html("Please Enter Blog Content");
-               $("#content-error").show();
-               errorContent = true;
-          }
-          else
-          {
-               $("#content-error").hide();
-          }
-    
-     }
+     /**
+     * Function to check after the submit button is clicked on add post.
+     *
+     * @param null
+     * @return boolian value for true or false
+     */
      $("#blog-submit").on('submit' , function(e){
         e.preventDefault();
         
         errorTitle = false;
-       // errorAuthor = false;
-        //errorContent = false;
         
         checkTitle();
-       // checkAuthor(); 
-        //checkContent();
         
         if(errorTitle === false)
         {
