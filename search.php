@@ -5,7 +5,7 @@
 * Created : 08-feb-2017
 * Author  : Satyapriya Baral
 */
-    include_once 'header.php';
+    include_once './include/header.php';
     ?>
     <?php
 	
@@ -102,6 +102,6 @@
         }
     }
 	exit;
-	include_once 'footer.php';
+	include_once './include/footer.php';
 
 ?>

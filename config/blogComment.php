@@ -260,9 +260,10 @@
         *        5. $content - contains the blog data.
         *        6. $date - contains the date when the blog is posted.
         *        7. $time - contains the time when the blog is posted.
+        *        8. $categoryNumber - contains the index of category field.
         * @return - Null.
         */
-        public function editArticle($layout, $id, $title, $author, $content, $date, $time)
+        public function editArticle($layout, $id, $title, $author, $content, $date, $time, $categoryNumber)
         {
             if (!$this->DBLogin()) {
                 $this->writeLog("Error in database connection", $this->errorFile);
@@ -274,6 +275,7 @@
 			$editRecord->setField('blog', $content);
 			$editRecord->setField('date', $date);
 			$editRecord->setField('time', $time);
+            $editRecord->setField('category', $categoryNumber);
 			$result = $editRecord->execute();
             if (FileMaker::isError($result)) {
                 $this->writeLog("Error in editing the file", $this->errorFile);

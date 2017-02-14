@@ -9,7 +9,7 @@
     $PageTitle = "Article";
 	
 	//contains all the HTML header codes.
-    include_once 'header.php';
+    include_once './include/header.php';
 	
     //Connecting to Filemaker database
     require_once "./config/config.php";
@@ -150,5 +150,5 @@
 <!--After Ajax call the comments are displayed here-->
 <div id="output"></div>
 <?php
-include_once 'footer.php';
+include_once './include/footer.php';
 ?>

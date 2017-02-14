@@ -7,7 +7,7 @@
 */
 
 	session_start();
-	
+	$PageTitle = "Blog";
 	//Connecting to Filemaker Database
 	require_once "./config/config.php";
 	
@@ -54,7 +54,14 @@
 				$title = $blogobj->Sanitize($_POST['title']);
 				$author = $blogobj->Sanitize($_POST['author']);
 				$content = $_POST['content'];
-				$blogobj->editArticle('blogComment', $id, $title, $author, $content, $date, $time);
+				$category = $_POST['category'];
+				
+				//codes to check the category and insert data according to that.
+				if($category === 'All') { $categoryNumber = 1; }
+				elseif($category === 'Sports') { $categoryNumber = 2; }
+				elseif($category === 'Education') { $categoryNumber = 3; }
+				elseif($category === 'Politics') { $categoryNumber = 4; }
+				$blogobj->editArticle('blogComment', $id, $title, $author, $content, $date, $time, $categoryNumber);
 				
 				//After editing redirect to the Home page
 				header("Location: index.php");
@@ -62,7 +69,7 @@
 		}
 
 	$PageTitle = "Update";
-	include_once 'header.php';
+	include_once './include/header.php';
 ?>
 
 <!--Navbar to go to the home page-->
@@ -91,6 +98,7 @@
 						<input type="text" class="form-control" id="title"
 							name="title" value="<?php if(isset($subject))
 							{ echo $subject; } ?>">
+					</div>
 					<div class="form-group">
 						<b>Author : </b></br>
 						<input type="text" class="form-control" id="author"
@@ -100,6 +108,16 @@
 							<?php if(isset($authorError)) {
 							echo $authorError;}?></span>
 					</div>
+					<div class="form-group">
+							<label for="category">Select Category:</label>
+								<select class="form-control"  name="category">
+									<option>All</option>
+									<option>Sports</option>
+									<option>Education</option>
+									<option>Politics</option>
+								</select>
+							</div>
+					
 					<div class="form-group">
 						<label for="Blog"></label>
 						<b>Content : </b></br>
@@ -115,5 +133,5 @@
 				</form>
 		</div>
 <?php
-include_once 'footer.php';
+include_once './include/footer.php';
 ?>

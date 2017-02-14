@@ -15,7 +15,7 @@
 	$PageTitle = "Blog";
 	
 	//contains the header file of html.
-	include_once 'header.php';
+	include_once './include/header.php';
 ?>
 
 <!-- Navbar Section -->
@@ -211,5 +211,5 @@ foreach($records as $record) {
 </div>
 </div>
 <?php
-	include_once 'footer.php';
+	include_once './include/footer.php';
 ?>

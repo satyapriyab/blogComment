@@ -7,7 +7,7 @@
 */
 
     //contains all the HTML header codes.
-    include_once 'header.php';
+    include_once './include/header.php';
 
     session_start();
     //Connecting to Filemaker database
@@ -79,5 +79,5 @@
 ?>
 
 <?php
-    include_once 'footer.php';
+    include_once './include/footer.php';
 ?>
